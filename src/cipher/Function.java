@@ -1,19 +1,22 @@
 package cipher;
 
+import java.util.Arrays;
+
+import utils.Bitwise;
+
 public class Function {
 
     private Function() {
 	throw new IllegalStateException("Non-instantiable class");
     }
 
-    public static int function(int message, int[] keys) {
-	int result = message;
+    public static byte[] function(byte[] message, byte[][] keys) {
+	byte[] mixedMessage = Arrays.copyOf(message, message.length);
 
-	for (int i = 0; i < keys.length; i++) {
-	    result ^= keys[i];
-	}
+	for (int i = 0; i < keys.length; i++)
+	    mixedMessage = Bitwise.xor(mixedMessage, keys[i]);
 
-	return result;
+	return mixedMessage;
     }
 
 }
