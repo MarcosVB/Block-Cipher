@@ -28,8 +28,8 @@ public class CBC {
 
 	keys = ArrayUtils.reverse(keys);
 
-	ans[0] = Function.function(Bitwise.xor(message[0], KeyScheduler.expandKey(INIT_VECTOR, message[0].length)),
-		keys);
+	ans[0] = Bitwise.xor(Function.function(message[0], keys),
+		KeyScheduler.expandKey(INIT_VECTOR, message[0].length));
 
 	for (int i = 1; i < message.length; i++)
 	    ans[i] = Bitwise.xor(Function.function(message[i], keys), message[i - 1]);
