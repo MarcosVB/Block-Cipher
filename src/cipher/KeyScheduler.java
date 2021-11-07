@@ -11,13 +11,12 @@ public class KeyScheduler {
 	}
 
 	public static byte[][] generateKeys(byte[] key, int shiftSize, int keySize, int amount) {
-		byte[] sourceKey = Arrays.copyOf(key, key.length);
 		byte[][] keys = new byte[amount][keySize];
 
-		sourceKey = expandKey(sourceKey, keySize);
+		keys[0] = expandKey(key, keySize);
 
-		for (int i = 0; i < keys.length; i++)
-			keys[i] = (sourceKey = Bitwise.circularShift(sourceKey, shiftSize));
+		for (int i = 1; i < keys.length; i++)
+			keys[i] = Bitwise.circularShift(keys[i - 1], shiftSize);
 
 		return keys;
 	}
