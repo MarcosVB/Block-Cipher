@@ -16,7 +16,7 @@ public class KeyScheduler {
 		keys[0] = expandKey(key, keySize);
 
 		for (int i = 1; i < keys.length; i++)
-			keys[i] = Bitwise.circularShift(keys[i - 1], shiftSize);
+			keys[i] = Bitwise.circularLeftShift(keys[i - 1], shiftSize);
 
 		return keys;
 	}

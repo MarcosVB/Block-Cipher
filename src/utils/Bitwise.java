@@ -36,7 +36,7 @@ public class Bitwise {
 		return (byte) ((number & 0xff) >>> shift);
 	}
 
-	public static byte[] circularShift(byte[] source, int shift) {
+	public static byte[] circularLeftShift(byte[] source, int shift) {
 		int remainingShift = shift;
 		int currentShift;
 		byte bitsFromFirstByte;
@@ -52,6 +52,29 @@ public class Bitwise {
 			}
 
 			array[array.length - 1] = or(leftShift(array[array.length - 1], currentShift), bitsFromFirstByte);
+
+			remainingShift -= currentShift;
+		}
+
+		return array;
+	}
+
+	public static byte[] circularRightShift(byte[] source, int shift) {
+		int remainingShift = shift;
+		int currentShift;
+		byte bitsFromLastByte;
+		byte[] array = Arrays.copyOf(source, source.length);
+
+		while (remainingShift > 0) {
+			currentShift = remainingShift < Byte.SIZE ? remainingShift : Byte.SIZE - 1;
+			bitsFromLastByte = leftShift(array[array.length - 1], Byte.SIZE - currentShift);
+
+			for (int i = array.length - 1; i > 0; i--) {
+				array[i] = or(rightShiftUnsigned(array[i], currentShift),
+						leftShift(array[i - 1], Byte.SIZE - currentShift));
+			}
+
+			array[0] = or(rightShiftUnsigned(array[0], currentShift), bitsFromLastByte);
 
 			remainingShift -= currentShift;
 		}
