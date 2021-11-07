@@ -1,5 +1,7 @@
 package utils;
 
+import java.util.Arrays;
+
 public class Bitwise {
 
 	private Bitwise() {
@@ -32,6 +34,29 @@ public class Bitwise {
 
 	public static byte rightShiftUnsigned(byte number, int shift) {
 		return (byte) ((number & 0xff) >>> shift);
+	}
+
+	public static byte[] circularShift(byte[] source, int shift) {
+		int remainingShift = shift;
+		int currentShift;
+		byte bitsFromFirstByte;
+		byte[] array = Arrays.copyOf(source, source.length);
+
+		while (remainingShift > 0) {
+			currentShift = remainingShift < Byte.SIZE ? remainingShift : Byte.SIZE - 1;
+			bitsFromFirstByte = rightShiftUnsigned(array[0], Byte.SIZE - currentShift);
+
+			for (int i = 0; i < array.length - 1; i++) {
+				array[i] = or(leftShift(array[i], currentShift),
+						rightShiftUnsigned(array[i + 1], Byte.SIZE - currentShift));
+			}
+
+			array[array.length - 1] = or(leftShift(array[array.length - 1], currentShift), bitsFromFirstByte);
+
+			remainingShift -= currentShift;
+		}
+
+		return array;
 	}
 
 }

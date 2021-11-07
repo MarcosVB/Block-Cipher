@@ -17,7 +17,7 @@ public class KeyScheduler {
 		sourceKey = expandKey(sourceKey, keySize);
 
 		for (int i = 0; i < keys.length; i++)
-			keys[i] = (sourceKey = circularShift(sourceKey, shiftSize));
+			keys[i] = (sourceKey = Bitwise.circularShift(sourceKey, shiftSize));
 
 		return keys;
 	}
@@ -42,30 +42,6 @@ public class KeyScheduler {
 		}
 
 		return expandedKey;
-	}
-
-	public static byte[] circularShift(byte[] source, int shift) {
-		int remainingShift = shift;
-		int currentShift;
-		byte bitsFromFirstByte;
-		byte[] array = Arrays.copyOf(source, source.length);
-
-		while (remainingShift > 0) {
-			currentShift = remainingShift < Byte.SIZE ? remainingShift : Byte.SIZE - 1;
-			bitsFromFirstByte = Bitwise.rightShiftUnsigned(array[0], Byte.SIZE - currentShift);
-
-			for (int i = 0; i < array.length - 1; i++) {
-				array[i] = Bitwise.or(Bitwise.leftShift(array[i], currentShift),
-						Bitwise.rightShiftUnsigned(array[i + 1], Byte.SIZE - currentShift));
-			}
-
-			array[array.length - 1] = Bitwise.or(Bitwise.leftShift(array[array.length - 1], currentShift),
-					bitsFromFirstByte);
-
-			remainingShift -= currentShift;
-		}
-
-		return array;
 	}
 
 }
