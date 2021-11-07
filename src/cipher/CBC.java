@@ -13,11 +13,10 @@ public class CBC {
 		byte[][] ans = new byte[message.length][message[0].length];
 		byte[][] keys = KeyScheduler.generateKeys(key, SHIFT_SIZE, message[0].length, KEY_AMOUNT);
 
-		ans[0] = Function.function(Bitwise.xor(message[0], KeyScheduler.expandKey(INIT_VECTOR, message[0].length)),
-				keys);
+		ans[0] = Cipher.function(Bitwise.xor(message[0], KeyScheduler.expandKey(INIT_VECTOR, message[0].length)), keys);
 
 		for (int i = 1; i < message.length; i++)
-			ans[i] = Function.function(Bitwise.xor(message[i], ans[i - 1]), keys);
+			ans[i] = Cipher.function(Bitwise.xor(message[i], ans[i - 1]), keys);
 
 		return ans;
 	}
@@ -28,11 +27,10 @@ public class CBC {
 
 		keys = ArrayUtils.reverse(keys);
 
-		ans[0] = Bitwise.xor(Function.function(message[0], keys),
-				KeyScheduler.expandKey(INIT_VECTOR, message[0].length));
+		ans[0] = Bitwise.xor(Cipher.function(message[0], keys), KeyScheduler.expandKey(INIT_VECTOR, message[0].length));
 
 		for (int i = 1; i < message.length; i++)
-			ans[i] = Bitwise.xor(Function.function(message[i], keys), message[i - 1]);
+			ans[i] = Bitwise.xor(Cipher.function(message[i], keys), message[i - 1]);
 
 		return ans;
 	}

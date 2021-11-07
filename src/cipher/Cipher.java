@@ -4,9 +4,9 @@ import java.util.Arrays;
 
 import utils.Bitwise;
 
-public class Function {
+public class Cipher {
 
-	private Function() {
+	private Cipher() {
 		throw new IllegalStateException("Non-instantiable class");
 	}
 
