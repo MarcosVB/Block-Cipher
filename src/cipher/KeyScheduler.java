@@ -13,7 +13,7 @@ public class KeyScheduler {
 	public static byte[][] generateKeys(byte[] key, int shiftSize, int keySize, int amount) {
 		byte[][] keys = new byte[amount][keySize];
 
-		keys[0] = expandKey(key, keySize);
+		keys[0] = Bitwise.circularLeftShift(expandKey(key, keySize), shiftSize);
 
 		for (int i = 1; i < keys.length; i++)
 			keys[i] = Bitwise.circularLeftShift(keys[i - 1], shiftSize);

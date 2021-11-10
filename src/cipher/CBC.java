@@ -5,7 +5,7 @@ import utils.Bitwise;
 
 public class CBC {
 
-	private static final int SHIFT_SIZE = 1;
+	private static final int SHIFT_SIZE = 5;
 	private static final int KEY_AMOUNT = 8;
 	private static final byte[] INIT_VECTOR = { 101 };
 
@@ -27,10 +27,11 @@ public class CBC {
 
 		keys = ArrayUtils.reverse(keys);
 
-		ans[0] = Bitwise.xor(Cipher.function(message[0], keys), KeyScheduler.expandKey(INIT_VECTOR, message[0].length));
+		ans[0] = Bitwise.xor(Cipher.unFunction(message[0], keys),
+				KeyScheduler.expandKey(INIT_VECTOR, message[0].length));
 
 		for (int i = 1; i < message.length; i++)
-			ans[i] = Bitwise.xor(Cipher.function(message[i], keys), message[i - 1]);
+			ans[i] = Bitwise.xor(Cipher.unFunction(message[i], keys), message[i - 1]);
 
 		return ans;
 	}
