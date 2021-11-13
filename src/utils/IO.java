@@ -28,10 +28,10 @@ public class IO {
 		InputStreamReader input = getReader(filePath);
 		LinkedList<Byte> bytes = new LinkedList<>();
 
-		byte character;
+		int character;
 
-		while ((character = (byte) input.read()) != -1)
-			bytes.add(character);
+		while ((character = input.read()) != -1)
+			bytes.add((byte) character);
 
 		input.close();
 		return bytes;
