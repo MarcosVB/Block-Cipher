@@ -12,6 +12,26 @@ public class Bitwise {
 		return (byte) ((a & 0xff) | (b & 0xff));
 	}
 
+	public static byte xor(byte a, byte b) {
+		return (byte) ((a & 0xff) ^ (b & 0xff));
+	}
+
+	public static byte xor(byte a, byte b, byte c) {
+		return xor(a, xor(b, c));
+	}
+
+	public static byte xor(byte a, byte b, byte c, byte d) {
+		return xor(a, xor(b, c, d));
+	}
+
+	public static byte xor(byte a, byte b, byte c, byte d, byte e) {
+		return xor(a, xor(b, c, d, e));
+	}
+
+	public static byte xor(byte a, byte b, byte c, byte d, byte e, byte f) {
+		return xor(a, xor(b, c, d, e, f));
+	}
+
 	public static byte[] xor(byte[] a, byte[] b) {
 		if (a.length != b.length)
 			throw new IllegalArgumentException("Byte array sizes are different: " + a.length + " != " + b.length);
@@ -34,6 +54,20 @@ public class Bitwise {
 
 	public static byte rightShiftUnsigned(byte number, int shift) {
 		return (byte) ((number & 0xff) >>> shift);
+	}
+
+	public static byte circularLeftShift(byte number, int shift) {
+		int remainingShift = shift;
+		int currentShift;
+		byte shifted = number;
+
+		while (remainingShift > 0) {
+			currentShift = remainingShift < Byte.SIZE ? remainingShift : Byte.SIZE - 1;
+			shifted = or(leftShift(shifted, currentShift), rightShiftUnsigned(shifted, Byte.SIZE - currentShift));
+			remainingShift -= currentShift;
+		}
+
+		return shifted;
 	}
 
 	public static byte[] circularLeftShift(byte[] source, int shift) {
