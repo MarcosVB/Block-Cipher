@@ -15,7 +15,7 @@ public class Cipher {
 
 		for (int i = 0; i < keys.length; i++) {
 			mixedMessage = Bitwise.xor(mixedMessage, keys[i]);
-			mixedMessage = Bitwise.circularLeftShift(mixedMessage, 5); // issue with certain shift sizes
+			mixedMessage = Bitwise.circularLeftShift(mixedMessage, i + 1);
 		}
 
 		return mixedMessage;
@@ -25,7 +25,7 @@ public class Cipher {
 		byte[] mixedMessage = Arrays.copyOf(message, message.length);
 
 		for (int i = 0; i < keys.length; i++) {
-			mixedMessage = Bitwise.circularRightShift(mixedMessage, 5); // issue with certain shift sizes
+			mixedMessage = Bitwise.circularRightShift(mixedMessage, keys.length - i);
 			mixedMessage = Bitwise.xor(mixedMessage, keys[i]);
 		}
 
