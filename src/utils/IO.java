@@ -6,7 +6,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
-import java.nio.charset.StandardCharsets;
+import java.io.UnsupportedEncodingException;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -16,16 +16,18 @@ public class IO {
 		throw new IllegalStateException("Utility class");
 	}
 
-	public static InputStreamReader getReader(String path) throws FileNotFoundException {
-		return new InputStreamReader(new FileInputStream(path), StandardCharsets.UTF_8);
+	public static InputStreamReader getReader(String path, String charset)
+			throws FileNotFoundException, UnsupportedEncodingException {
+		return new InputStreamReader(new FileInputStream(path), charset);
 	}
 
-	public static OutputStreamWriter getWriter(String path) throws FileNotFoundException {
-		return new OutputStreamWriter(new FileOutputStream(path), StandardCharsets.UTF_8);
+	public static OutputStreamWriter getWriter(String path, String charset)
+			throws FileNotFoundException, UnsupportedEncodingException {
+		return new OutputStreamWriter(new FileOutputStream(path), charset);
 	}
 
-	public static List<Byte> getByteList(String filePath) throws IOException {
-		InputStreamReader input = getReader(filePath);
+	public static List<Byte> getByteList(String filePath, String charset) throws IOException {
+		InputStreamReader input = getReader(filePath, charset);
 		LinkedList<Byte> bytes = new LinkedList<>();
 
 		int character;
@@ -37,8 +39,8 @@ public class IO {
 		return bytes;
 	}
 
-	public static byte[][] read(String filePath) throws IOException {
-		LinkedList<Byte> bytes = (LinkedList<Byte>) getByteList(filePath);
+	public static byte[][] read(String filePath, String charset) throws IOException {
+		LinkedList<Byte> bytes = (LinkedList<Byte>) getByteList(filePath, charset);
 
 		int i = 0;
 		int j = 0;
@@ -63,8 +65,8 @@ public class IO {
 		return blocks;
 	}
 
-	public static void write(String filePath, byte[][] blocks) throws IOException {
-		OutputStreamWriter output = getWriter(filePath);
+	public static void write(String filePath, byte[][] blocks, String charset) throws IOException {
+		OutputStreamWriter output = getWriter(filePath, charset);
 
 		for (int i = 0; i < blocks.length; i++) {
 			for (int j = 0; j < blocks[i].length; j++) {
