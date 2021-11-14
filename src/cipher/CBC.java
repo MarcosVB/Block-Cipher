@@ -9,7 +9,11 @@ public class CBC {
 	private static final int KEY_AMOUNT = 8;
 	private static final byte[] INIT_VECTOR = { 101 };
 
-	public byte[][] encrypt(byte[][] message, byte[] key) {
+	private CBC() {
+		throw new IllegalStateException("Non-instantiable class");
+	}
+
+	public static byte[][] encrypt(byte[][] message, byte[] key) {
 		byte[][] ans = new byte[message.length][message[0].length];
 		byte[][] keys = KeyScheduler.generateKeys(key, SHIFT_SIZE, message[0].length, KEY_AMOUNT);
 
@@ -21,7 +25,7 @@ public class CBC {
 		return ans;
 	}
 
-	public byte[][] decrypt(byte[][] message, byte[] key) {
+	public static byte[][] decrypt(byte[][] message, byte[] key) {
 		byte[][] ans = new byte[message.length][message[0].length];
 		byte[][] keys = KeyScheduler.generateKeys(key, SHIFT_SIZE, message[0].length, KEY_AMOUNT);
 
