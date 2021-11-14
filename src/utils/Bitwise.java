@@ -81,7 +81,8 @@ public class Bitwise {
 			bitsFromFirstByte = rightShiftUnsigned(array[0], Byte.SIZE - currentShift);
 
 			for (int i = 0; i < array.length - 1; i++) {
-				array[i] = or(leftShift(array[i], currentShift),
+				array[i] = or(
+						leftShift(array[i], currentShift),
 						rightShiftUnsigned(array[i + 1], Byte.SIZE - currentShift));
 			}
 
@@ -104,7 +105,8 @@ public class Bitwise {
 			bitsFromLastByte = leftShift(array[array.length - 1], Byte.SIZE - currentShift);
 
 			for (int i = array.length - 1; i > 0; i--) {
-				array[i] = or(rightShiftUnsigned(array[i], currentShift),
+				array[i] = or(
+						rightShiftUnsigned(array[i], currentShift),
 						leftShift(array[i - 1], Byte.SIZE - currentShift));
 			}
 

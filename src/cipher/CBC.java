@@ -27,8 +27,8 @@ public class CBC {
 
 		keys = ArrayUtils.reverse(keys);
 
-		ans[0] = Bitwise.xor(Cipher.unFunction(message[0], keys),
-				KeyScheduler.expandKey(INIT_VECTOR, message[0].length));
+		ans[0] = Bitwise
+				.xor(Cipher.unFunction(message[0], keys), KeyScheduler.expandKey(INIT_VECTOR, message[0].length));
 
 		for (int i = 1; i < message.length; i++)
 			ans[i] = Bitwise.xor(Cipher.unFunction(message[i], keys), message[i - 1]);
