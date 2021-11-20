@@ -46,6 +46,59 @@ public class IO {
 		int j = 0;
 		int k = 0;
 
+		byte[][] blocks = new byte[(int) Math.floor(bytes.size() / 6.0 + 1)][6];
+
+		while (bytes.size() > 5) {
+			while (j < 6)
+				blocks[i][j++] = bytes.removeFirst();
+			i++;
+			j = 0;
+		}
+
+		byte padding = 0;
+
+		if (!bytes.isEmpty()) {
+			while (!bytes.isEmpty())
+				blocks[i][k++] = bytes.removeFirst();
+
+			while (k < 5) {
+				blocks[i][k++] = 0;
+				padding++;
+			}
+
+			while (k < 6) {
+				blocks[i][k++] = ++padding;
+			}
+		}
+
+		if (padding == 0) {
+			for (int m = 0; m < 6; m++) {
+				blocks[blocks.length - 1][m] = padding;
+			}
+		}
+
+		return blocks;
+	}
+
+	public static void write(String filePath, byte[][] blocks, String charset) throws IOException {
+		OutputStreamWriter output = getWriter(filePath, charset);
+
+		for (int i = 0; i < blocks.length; i++) {
+			for (int j = 0; j < blocks[i].length; j++) {
+				output.write(Byte.toUnsignedInt(blocks[i][j]));
+			}
+		}
+
+		output.close();
+	}
+
+	public static byte[][] readWithoutPadding(String filePath, String charset) throws IOException {
+		LinkedList<Byte> bytes = (LinkedList<Byte>) getByteList(filePath, charset);
+
+		int i = 0;
+		int j = 0;
+		int k = 0;
+
 		byte[][] blocks = new byte[(int) Math.ceil(bytes.size() / 6.0)][6];
 
 		while (bytes.size() > 5) {
@@ -58,19 +111,27 @@ public class IO {
 		if (!bytes.isEmpty()) {
 			while (!bytes.isEmpty())
 				blocks[i][k++] = bytes.removeFirst();
-
-			while (k < 6)
-				blocks[i][k++] = (byte) 0b11111111;
 		}
+
 		return blocks;
 	}
 
-	public static void write(String filePath, byte[][] blocks, String charset) throws IOException {
+	public static void writeWithoutPadding(String filePath, byte[][] blocks, String charset) throws IOException {
 		OutputStreamWriter output = getWriter(filePath, charset);
 
-		for (int i = 0; i < blocks.length; i++) {
+		int lastRow = blocks.length - 1;
+		int lastColumn = blocks[lastRow].length - 1;
+		byte padding = blocks[lastRow][lastColumn];
+
+		for (int i = 0; i < lastRow; i++) {
 			for (int j = 0; j < blocks[i].length; j++) {
 				output.write(Byte.toUnsignedInt(blocks[i][j]));
+			}
+		}
+
+		if (padding > 0) {
+			for (int j = 0; j < blocks[lastRow].length - padding; j++) {
+				output.write(Byte.toUnsignedInt(blocks[lastRow][j]));
 			}
 		}
 
